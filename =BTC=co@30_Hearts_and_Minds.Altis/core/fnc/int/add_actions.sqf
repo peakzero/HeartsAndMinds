@@ -196,3 +196,35 @@ if (btc_p_arsenal_Type > 0) then {
     };
 };
 if (btc_p_arsenal_Restrict isNotEqualTo 0) then {[btc_gear_object, btc_p_arsenal_Type, btc_p_arsenal_Restrict, btc_custom_arsenal] call btc_fnc_arsenal_data;};
+
+//Arsenal2
+{
+    private _action = _x call ace_interact_menu_fnc_createAction;
+    [btc_gear_object_1, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToObject;
+    if (btc_p_respawn_fromFOBToBase) then {
+        [btc_fob_flag, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToClass;
+    };
+} forEach _actions;
+{
+    _x params ["_cardinal", "_degrees"];
+
+    _action = ["FOB" + _cardinal, localize _cardinal, "\A3\ui_f\data\igui\cfg\simpleTasks\types\map_ca.paa", {}, {true}, {_this call btc_fnc_fob_redeploy}, _degrees] call ace_interact_menu_fnc_createAction;
+    [btc_gear_object_1, 0, ["ACE_MainActions", "FOB"], _action] call ace_interact_menu_fnc_addActionToObject;
+    if (btc_p_respawn_fromFOBToBase) then {
+        [btc_fob_flag, 0, ["ACE_MainActions", "FOB"], _action] call ace_interact_menu_fnc_addActionToClass;
+    };
+} forEach [["str_q_north_east", [0, 90]], ["str_q_south_east", [90, 180]], ["str_q_south_west", [180, 270]], ["str_q_north_west", [270, 360]]];
+
+//Arsenal
+//BIS
+if (btc_p_arsenal_Type < 3) then {
+    btc_gear_object_1 addAction [localize "STR_BTC_HAM_ACTION_ARSENAL_OPEN_BIS", "['Open', [btc_p_arsenal_Restrict isNotEqualTo 1, _this select 0]] call bis_fnc_arsenal;"];
+};
+//ACE
+if (btc_p_arsenal_Type > 0) then {
+    [btc_gear_object_1, btc_p_arsenal_Restrict isNotEqualTo 1, false] call ace_arsenal_fnc_initBox;
+    if (btc_p_arsenal_Type in [2, 4]) then {
+        btc_gear_object_1 addAction [localize "STR_BTC_HAM_ACTION_ARSENAL_OPEN_ACE", "[btc_gear_object_1, player] call ace_arsenal_fnc_openBox;"];
+    };
+};
+if (btc_p_arsenal_Restrict isNotEqualTo 0) then {[btc_gear_object_1, btc_p_arsenal_Type, btc_p_arsenal_Restrict, btc_custom_arsenal] call btc_fnc_arsenal_data;};
